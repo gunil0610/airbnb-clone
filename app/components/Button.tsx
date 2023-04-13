@@ -1,4 +1,6 @@
-import { ButtonHTMLAttributes, FC, forwardRef } from "react";
+"use client";
+
+import { ButtonHTMLAttributes, forwardRef } from "react";
 import { IconType } from "react-icons";
 import { VariantProps, cva } from "class-variance-authority";
 import { cn } from "../common/utils";
@@ -6,12 +8,7 @@ import { cn } from "../common/utils";
 interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  // label: string;
-  // onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  // disabled?: boolean;
-  // outline?: boolean;
-  // small?: boolean;
-  // icon?: IconType;
+  icon?: IconType;
 }
 
 const buttonVariants = cva(
@@ -35,13 +32,16 @@ const buttonVariants = cva(
 );
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, size, variant, ...props }, ref) => {
+  ({ className, size, variant, children, icon: Icon, ...props }, ref) => {
     return (
       <button
         ref={ref}
         className={cn(buttonVariants({ variant, size, className }))}
         {...props}
-      />
+      >
+        {Icon && <Icon size={24} className="absolute left-4 top-3" />}
+        {children}
+      </button>
     );
   }
 );
