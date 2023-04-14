@@ -21,6 +21,7 @@ const RegisterModal: FC<RegisterModalProps> = ({}) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -33,8 +34,9 @@ const RegisterModal: FC<RegisterModalProps> = ({}) => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
     try {
-      const res = await axios.post("/api/auth/register", data);
-      console.log(res);
+      await axios.post("/api/auth/register", data);
+      registerModal.onClose();
+      reset();
     } catch (error) {
       toast.error("Something went wrong!");
     } finally {
