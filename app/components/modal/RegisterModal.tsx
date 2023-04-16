@@ -12,6 +12,7 @@ import Heading from "../Heading";
 import Input from "../inputs/Input";
 import { toast } from "react-hot-toast";
 import { Button } from "../Button";
+import { signIn } from "next-auth/react";
 
 interface RegisterModalProps {}
 
@@ -98,7 +99,11 @@ const RegisterModal: FC<RegisterModalProps> = ({}) => {
       <Button variant="outline" icon={FcGoogle} onClick={() => {}}>
         Continue with Google
       </Button>
-      <Button variant="outline" icon={AiFillGithub} onClick={() => {}}>
+      <Button
+        variant="outline"
+        icon={AiFillGithub}
+        onClick={() => signIn("github")}
+      >
         Continue with Github
       </Button>
       <div className="text-neutral-500 text-center mt-4 font-light">
