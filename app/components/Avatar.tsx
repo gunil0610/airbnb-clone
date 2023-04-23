@@ -3,9 +3,11 @@
 import Image from "next/image";
 import { FC } from "react";
 
-interface AvatarProps {}
+interface AvatarProps {
+  src?: string | null;
+}
 
-const Avatar: FC<AvatarProps> = ({}) => {
+const Avatar: FC<AvatarProps> = ({ src }) => {
   return (
     <div>
       <Image
@@ -13,7 +15,7 @@ const Avatar: FC<AvatarProps> = ({}) => {
         height={30}
         width={30}
         alt="Avatar"
-        src="/images/placeholder.jpg"
+        src={src || "/images/placeholder.jpg"}
       />
     </div>
   );

@@ -96,10 +96,18 @@ const LoginModal: FC<LoginModalProps> = ({}) => {
   const footerContent = (
     <div className="flex flex-col gap-4 mt-3">
       <hr />
-      <Button variant="outline" icon={FcGoogle} onClick={() => {}}>
+      <Button
+        variant="outline"
+        icon={FcGoogle}
+        onClick={() => signIn("google")}
+      >
         Continue with Google
       </Button>
-      <Button variant="outline" icon={AiFillGithub} onClick={() => {}}>
+      <Button
+        variant="outline"
+        icon={AiFillGithub}
+        onClick={() => signIn("github")}
+      >
         Continue with Github
       </Button>
       <div className="text-neutral-500 text-center mt-4 font-light">

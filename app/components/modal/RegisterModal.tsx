@@ -96,7 +96,11 @@ const RegisterModal: FC<RegisterModalProps> = ({}) => {
   const footerContent = (
     <div className="flex flex-col gap-4 mt-3">
       <hr />
-      <Button variant="outline" icon={FcGoogle} onClick={() => {}}>
+      <Button
+        variant="outline"
+        icon={FcGoogle}
+        onClick={() => signIn("google")}
+      >
         Continue with Google
       </Button>
       <Button
