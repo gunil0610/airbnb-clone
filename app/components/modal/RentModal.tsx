@@ -7,6 +7,32 @@ import Heading from "../Heading";
 import { categories } from "../navbar/Categories";
 import CategoryInput from "../inputs/CategoryInput";
 import { FieldValues, useForm } from "react-hook-form";
+import CountrySelect from "../inputs/CountrySelect";
+import dynamic from "next/dynamic";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const schema = z.object({
+  category: z.string().nonempty(),
+  location: z
+    .object({
+      flag: z.string().nonempty(),
+      label: z.string().nonempty(),
+      latlng: z.array(z.number()),
+      region: z.string().nonempty(),
+      value: z.string().nonempty(),
+    })
+    .nullable(),
+  guestCount: z.number().min(1),
+  roomCount: z.number().min(1),
+  bathroomCount: z.number().min(1),
+  imageSrc: z.string(),
+  price: z.number().min(1),
+  title: z.string().nonempty(),
+  description: z.string(),
+});
+
+type FormData = z.infer<typeof schema>;
 
 interface RentModalProps {}
 
@@ -31,7 +57,7 @@ const RentModal: FC<RentModalProps> = ({}) => {
     watch,
     formState: { errors },
     reset,
-  } = useForm<FieldValues>({
+  } = useForm<FormData>({
     defaultValues: {
       category: "",
       location: null,
@@ -43,11 +69,21 @@ const RentModal: FC<RentModalProps> = ({}) => {
       title: "",
       description: "",
     },
+    resolver: zodResolver(schema),
   });
 
   const category = watch("category");
+  const location = watch("location");
 
-  const setCustomValue = (id: string, value: any) => {
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("../Map"), {
+        ssr: false,
+      }),
+    [location]
+  );
+
+  const setCustomValue = (id: keyof FormData, value: any) => {
     setValue(id, value, {
       shouldDirty: true,
       shouldValidate: true,
@@ -77,7 +113,7 @@ const RentModal: FC<RentModalProps> = ({}) => {
     return "Back";
   }, [step]);
 
-  const bodyContent = (
+  let bodyContent = (
     <div className="flex flex-col gap-8">
       <Heading
         title="Which of these best describes your place?"
@@ -98,13 +134,28 @@ const RentModal: FC<RentModalProps> = ({}) => {
     </div>
   );
 
+  if (step === STEPS.LOCATION) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Where is your place located?"
+          subtitle="Help guests find you!"
+        />
+        <CountrySelect
+          value={location}
+          onChange={(value) => setCustomValue("location", value)}
+        />
+        <Map center={location?.latlng} />
+      </div>
+    );
+  }
+
   return (
     <Modal
       isOpen={rentModal.isOpen}
       onClose={rentModal.onClose}
-      onSubmit={rentModal.onClose}
+      onSubmit={onNext}
       actionLabel={actionLabel}
-      //   action={onNext}
       secondaryActionLabel={secondaryActionLabel}
       secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
       title="Airbnb your home!"
