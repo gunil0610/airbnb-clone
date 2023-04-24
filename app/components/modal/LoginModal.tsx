@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -18,6 +18,7 @@ interface LoginModalProps {}
 
 const LoginModal: FC<LoginModalProps> = ({}) => {
   const router = useRouter();
+
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
   const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +55,11 @@ const LoginModal: FC<LoginModalProps> = ({}) => {
       }
     });
   };
+
+  const toggle = useCallback(() => {
+    loginModal.onClose();
+    registerModal.onOpen();
+  }, [loginModal, registerModal]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
@@ -112,12 +118,9 @@ const LoginModal: FC<LoginModalProps> = ({}) => {
       </Button>
       <div className="text-neutral-500 text-center mt-4 font-light">
         <div className="flex flex-row justify-center items-center gap-2">
-          <p>New to Airbnb?</p>
+          <p>First time using Airbnb?</p>
           <p
-            onClick={() => {
-              loginModal.onClose();
-              registerModal.onOpen();
-            }}
+            onClick={toggle}
             className="text-neutral-800 cursor-pointer hover:underline"
           >
             Create an account

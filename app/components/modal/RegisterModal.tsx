@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import axios from "axios";
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
@@ -46,6 +46,11 @@ const RegisterModal: FC<RegisterModalProps> = ({}) => {
       setIsLoading(false);
     }
   };
+
+  const toggle = useCallback(() => {
+    registerModal.onClose();
+    loginModal.onOpen();
+  }, [registerModal, loginModal]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
@@ -114,10 +119,7 @@ const RegisterModal: FC<RegisterModalProps> = ({}) => {
         <div className="flex flex-row justify-center items-center gap-2">
           <p>Already have an account?</p>
           <p
-            onClick={() => {
-              registerModal.onClose();
-              loginModal.onOpen();
-            }}
+            onClick={toggle}
             className="text-neutral-800 cursor-pointer hover:underline"
           >
             Log in
