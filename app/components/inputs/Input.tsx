@@ -60,7 +60,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           className={cn(
             inputVariants({
-              format,
+              format: formatPrice ? "price" : "default",
               border: error ? "error" : "default",
               className,
             })
