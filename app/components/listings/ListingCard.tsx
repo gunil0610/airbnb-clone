@@ -36,7 +36,7 @@ const ListingCard: FC<ListingCardProps> = ({
 
     const handleCancel = useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
-            e.preventDefault();
+            e.stopPropagation();
 
             if (disabled) {
                 return;
